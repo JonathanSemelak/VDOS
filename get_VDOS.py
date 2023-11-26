@@ -262,7 +262,7 @@ if(mode=="full"):
                     yfft += yfft_i
 else:
     distances_velocities = calc_derivative(distances, delta_t)
-    ACF = calc_ACF(atom_velocities)
+    ACF = calc_ACF(distances_velocities)
     yfft = calc_FFT(ACF, window)
 
 wavenumber = np.fft.fftfreq(len(yfft), delta_t * c)[0:int(len(yfft) / 2)]
