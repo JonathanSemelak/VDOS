@@ -37,7 +37,9 @@ python get_VDOS.py -i [input file] -o [output file] -dt [delta time] [other opti
 - `-dt`, `--delta_t`: Delta time in femtoseconds (required).
 - `-b`, `--bond`: Bond indices (two integers, required if mode is 'bond').
 - `-w`, `--window_kind`: Window kind for FFT (default: 'Gaussian').
-- `-n`, `--force_numerical`: Force numerical calculation of velocities (default: False).
+- `-f`, `--force_numerical`: Force numerical calculation of velocities (default: False).
+- `-n`, `--use_normalized_vectors`: Use the norm of the coordinates (or velocities) instead of individual coordinates (default: False).
+
 
 ### Examples
 ```console
