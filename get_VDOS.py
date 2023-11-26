@@ -45,6 +45,10 @@ def check_mode(args):
     if args.mode == 'bond':
         if args.bond is None or len(args.bond) != 2:
             raise argparse.ArgumentTypeError("When mode is 'bond', -b must be provided with two integers")
+    if args.mode == 'full':
+        if args.bond is not None:
+            print("WARNING: --mode (-m) is set to 'full' (default) but --bond -b arguments are provided")
+            print("WARNING: Maybe you forgot to set --mode (m) to 'bond'?")
     return args.mode
 
 def check_window_kind(window_kind):
