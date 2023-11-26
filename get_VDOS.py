@@ -1,36 +1,44 @@
-#######   PLEASE READ THE FOLLOWING INSTRUCTION BEFORE RUNNING SCRIPT   #######
-###                                                                         ###
-###  NOTE: The position file needs to align before run total VACF script!!  ###
-###                                                                         ###
-###    The Format for Running This Script:                                  ###
-###    ./VACF_KW.py INPUT_FILE_NAME DELTA_T OUTPUT_FILE_NAME                ###
-###                                                                         ###
-###    The values need to input manually when runing this script            ###
-###                                                                         ###
-###    (1) DIRECTORY_OF_YOUR_DATA: The path contains your data              ###
-###                                                                         ###
-###    (2) INPUT_FILE_NAME: The POSITION.xyz file                           ###
-###                     (NOTE: do NOT need to re-split the Position file)   ###
-###                                                                         ###
-###    (3) DELTA_T: The Time_step set in simulation, in unit of fs          ###
-###                                                                         ###
-###    (4) OUTPUT_FILE_NAME: The Name of the Output File.                   ###
-###                    (NOTE: do NOT need to type ">" sign!)                ###
-###                                                                         ###
-###    After inputing the above mentioned values, the program will list     ###
-###  the atoms and their corresponding indices (only the first 35 atoms     ###
-###  will show if the system is too large).                                 ###
-###    And then the program will ask the user to enter the type of mode,    ###
-###  e.g. "s": stretch, "b": bend, "w": wag, ect. and the indices of the    ###
-###  atoms in order to choose the group of atoms involve the mode (the      ###
-###  partial VACF). If the user enter "all" or "-1", the program will       ###
-###  choose all atoms to calcluate the total VACF.                          ### .
-###    Consequently, the program will ask the user to enter the type of     ###
-###  window function, e.g. "Gaussian", "BlackmanHarris", "Hamming "or       ###
-###  "Hann", ect.                                                           ###
-###    After all steps of inputs finishing, the calculation begins.         ###
-###                                                                         ###
-###############################  Let's Try It! ################################
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+# Get VDOS (Vibrational Density of States) from Molecular Dynamics Trajectories
+#
+# ## Overview
+# This Python script, `get_VDOS.py`, is designed to calculate the Vibrational Density of States (VDOS)
+# from molecular dynamics trajectory files. It supports different file formats and offers flexibility
+# in terms of data processing and analysis.
+#
+# ## Features
+# - Supports XYZ and NETCDF file formats.
+# - Option to choose between full and bond-specific modes.
+# - Various windowing functions for Fourier Transform: Gaussian, Blackman-Harris, Hamming, Hann.
+# - Option for numerical or file-based velocity calculations.
+# - Autocorrelation Function (ACF) calculation and FFT for VDOS computation.
+#
+# ## Requirements
+# - Python 3
+# - Libraries: NumPy, SciPy, ASE (for XYZ files)
+# - A trajectory file in either XYZ or NETCDF format.
+# ## Usage
+# Run the script from the command line with the required arguments.
+#
+# python get_VDOS.py -i [input file] -o [output file] -dt [delta time] [other optional arguments]
+#
+# ## Command-Line Arguments
+# - `-i`, `--input`: Input file name (required).
+# - `-o`, `--output`: Output file name (required).
+# - `-m`, `--mode`: Mode of operation ('full' or 'bond', default: 'full').
+# - `-dt`, `--delta_t`: Delta time in femtoseconds (required).
+# - `-b`, `--bond`: Bond indices (two integers, required if mode is 'bond').
+# - `-w`, `--window_kind`: Window kind for FFT (default: 'Gaussian').
+# - `-n`, `--force_numerical`: Force numerical calculation of velocities (default: False).
+#
+# ## Examples
+# python get_VDOS.py -i trajectory.xyz -o vdos_output.txt -dt 0.5
+#
+# ## Acknowledgments
+# This project incorporates modified functions from [Velocity-ACF](https://github.com/LePingKYXK/Velocity-ACF)
+# by [LePingKYXK](https://github.com/LePingKYXK). We thank the author for their valuable work which formed a
+# foundation for some of the features in this project.
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 import argparse
 import sys
