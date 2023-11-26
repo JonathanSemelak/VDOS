@@ -1,6 +1,8 @@
 # Get VDOS (Vibrational Density of States) from Molecular Dynamics Trajectories
 
-![plot](./img.png)
+<div align="center">
+    <img src="./img.png" width="700">
+</div>
 
 ## Overview
 This Python script, `get_VDOS.py`, is designed to calculate the Vibrational Density of States (VDOS) from molecular dynamics trajectory files. It supports different file formats and offers flexibility in terms of data processing and analysis.
