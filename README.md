@@ -54,7 +54,7 @@ python get_VDOS.py -i trajectory.xyz -o vdos_output.txt -dt 0.5
 The script outputs the VDOS data in the specified output file, including wavenumbers and intensity values.
 
 ## Contributing
-Contributions, issues, and feature requests are welcome. Feel free to check [issues page](link-to-your-issues-page) if you want to contribute.
+Contributions, issues, and feature requests are welcome. Feel free to check [issues page](https://github.com/JonathanSemelak/VDOS/issues) if you want to contribute.
 
 ## Acknowledgments
 This project incorporates modified functions from [Velocity-ACF](https://github.com/LePingKYXK/Velocity-ACF) by HUAN WANG. We thank the author for their valuable work which formed a foundation for some of the features in this project.
