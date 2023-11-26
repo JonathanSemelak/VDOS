@@ -175,7 +175,7 @@ check_bool(args.force_numerical,"--force_numerical ( -f)")
 force_numerical = args.force_numerical == "True"
 # Checks the variables are str True or False before converting to bool
 check_bool(args.use_normalized_vectors,"--use_normalized_vectors ( -n)")
-force_numerical = args.use_normalized_vectors == "True"
+use_normalized_vectors = args.use_normalized_vectors == "True"
 
 # Conditional import based on file extension
 if input_name.endswith('.xyz'): from ase.io import read
@@ -201,6 +201,10 @@ if input_name.endswith('.xyz'):  # XYZ file case
         print("The VDOS will be obtained considering all atoms")
         print("Velocities will be calculated numerically")
         normal_vectors = np.linalg.norm(coordinates, axis=-1)
+    else:
+        print("The VDOS associated with the stretching of two atoms will be obtained")
+        print("derivatives will be calculated numerically")
+        distances = np.linalg.norm((coordinates[:,bond_indices[0],:] - coordinates[:,bond_indices[1],:]), axis=1)
 else: # NETCDF file case
     print("Coordinates/velocities from the netcdf file will be read using the scipy library")
     print("Reading file...")
@@ -223,39 +227,47 @@ else: # NETCDF file case
             natoms = len(coordinates[0])
             normal_vectors = np.linalg.norm(coordinates, axis=-1)
         print("The program will deal with all atoms one by one.")
+    else:
+        print("The VDOS associated with the stretching of two atoms will be obtained")
+        print("derivatives will be calculated numerically")
+        distances = np.linalg.norm((coordinates[:,atom1,:] - coordinates[:,atom2,:]), axis=1)
 
 window=choose_window(nsteps,window_kind)
 
-used_normalized_vectors=True
-used_normalized_vectors=False
-if(used_normalized_vectors):
-    for i in range(natoms):
-        if (contains_velocities and not force_numerical):
-            atom_velocities = normal_vectors[:,i]
-        else:
-            atom_velocities = calc_derivative(normal_vectors[:,i], delta_t)
-        ACF = calc_ACF(atom_velocities)
-        yfft_i = calc_FFT(ACF, window)
-        if i == 0:
-            yfft = yfft_i
-        else:
-            yfft += yfft_i
-else:
-    for i in range(natoms):
-        for j in range(0,3): #xyz dimensions
+if(mode=="full"):
+    if(use_normalized_vectors):
+        for i in range(natoms):
             if (contains_velocities and not force_numerical):
-                atom_velocities = velocities[:,i,j]
+                atom_velocities = normal_vectors[:,i]
             else:
-                atom_velocities = calc_derivative(coordinates[:,i,j], delta_t)
+                atom_velocities = calc_derivative(normal_vectors[:,i], delta_t)
             ACF = calc_ACF(atom_velocities)
             yfft_i = calc_FFT(ACF, window)
             if i == 0:
                 yfft = yfft_i
             else:
                 yfft += yfft_i
+    else:
+        for i in range(natoms):
+            for j in range(0,3): #xyz dimensions
+                if (contains_velocities and not force_numerical):
+                    atom_velocities = velocities[:,i,j]
+                else:
+                    atom_velocities = calc_derivative(coordinates[:,i,j], delta_t)
+                ACF = calc_ACF(atom_velocities)
+                yfft_i = calc_FFT(ACF, window)
+                if i == 0:
+                    yfft = yfft_i
+                else:
+                    yfft += yfft_i
+else:
+    distances_velocities = calc_derivative(distances, delta_t)
+    ACF = calc_ACF(atom_velocities)
+    yfft = calc_FFT(ACF, window)
 
 wavenumber = np.fft.fftfreq(len(yfft), delta_t * c)[0:int(len(yfft) / 2)]
 intensity = yfft[0:int(len(yfft)/2)]
+
 
 print("VDOS saved to " + output_name + " file")
 print("Units are cm-1 for wavenumber and arbitrary units for intensity")
