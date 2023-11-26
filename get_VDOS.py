@@ -258,4 +258,6 @@ wavenumber = np.fft.fftfreq(len(yfft), delta_t * c)[0:int(len(yfft) / 2)]
 intensity = yfft[0:int(len(yfft)/2)]
 
 print("VDOS saved to " + output_name + " file")
-np.savetxt(output_name,np.column_stack((wavenumber,intensity)))
+print("Units are cm-1 for wavenumber and arbitrary units for intensity")
+header = "# Wavenumber(cm-1)   # Intensity (a. u.)"
+np.savetxt(output_name, np.column_stack((wavenumber, intensity)), header=header, comments='')
