@@ -26,7 +26,7 @@ in terms of data processing and analysis.
 ## Usage
 Run the script from the command line with the required arguments.
 python get_VDOS.py -i [input file] -o [output file] -dt [delta time] [other optional arguments]
-
+The input format is determined from the extension ('.xyz' for xyz files, and '')
 ## Acknowledgments
 This project incorporates modified functions from [Velocity-ACF](https://github.com/LePingKYXK/Velocity-ACF)
 by [LePingKYXK](https://github.com/LePingKYXK). We thank the author for their valuable work which formed a
@@ -146,12 +146,12 @@ parser = argparse.ArgumentParser(description=script_description,formatter_class=
 # Define the command-line arguments
 parser.add_argument('-i', '--input', required=True, help='Input file name')
 parser.add_argument('-o', '--output', required=True, help='Output file name')
-parser.add_argument('-m', '--mode', default='full', help="Mode of operation ('full' or 'bond')")
+parser.add_argument('-m', '--mode', default='full', help="Mode of operation ('full' (default) or 'bond')")
 parser.add_argument('-dt', '--delta_t', type=float, required=True, help='Delta time in femtoseconds')
 parser.add_argument('-b', '--bond', nargs=2, type=int, help='Bond indices (two integers)')
-parser.add_argument('-w', '--window_kind', default='Gaussian', help="Window kind for FFT ('Gaussian' or 'Blackman-Harris' or 'Hamming' or 'Hann')")
-parser.add_argument('-f', '--force_numerical', default='False', help="Force numerical calculation of velocities")
-parser.add_argument('-n', '--use_normalized_vectors', default='False', help="Use normalized vectors")
+parser.add_argument('-w', '--window_kind', default='Gaussian', help="Window kind for FFT ('Gaussian' (default) or 'Blackman-Harris' or 'Hamming' or 'Hann')")
+parser.add_argument('-f', '--force_numerical', default='False', help="Force numerical calculation of velocities (default: False)")
+parser.add_argument('-n', '--use_normalized_vectors', default='False', help="Use the norm of the coordinates (or velocities) instead of individual coordinates (default: False).")
 
 # If no arguments are provided, print the description and exit
 if len(sys.argv) == 1:
