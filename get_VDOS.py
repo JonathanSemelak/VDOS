@@ -213,8 +213,9 @@ if __name__ == "__main__":
 contains_velocities=False
 # Reads data
 if (input_name.endswith('.xyz') or input_name.endswith('.XYZ')):  # XYZ file case
-    print("Coordinates from the xyz file will be read using the ASE library")
-    print("Reading file...")
+
+    print("\nCoordinates from the xyz file will be read using the ASE library\n")
+    print("\nReading file...\n")
     trajectory = read(input_name, index=':')
     nsteps = len(trajectory)
     natoms = len(trajectory[0])
@@ -224,38 +225,38 @@ if (input_name.endswith('.xyz') or input_name.endswith('.XYZ')):  # XYZ file cas
     for i, frame in enumerate(trajectory):
         coordinates[i] = frame.get_positions()
     if(mode=="full"):
-        print("The VDOS will be obtained considering all atoms")
-        print("Velocities will be calculated numerically")
+        print("\nThe VDOS will be obtained considering all atoms\n")
+        print("\nVelocities will be calculated numerically\n")
         normal_vectors = np.linalg.norm(coordinates, axis=-1)
     else:
-        print("The VDOS associated with the stretching of two atoms will be obtained")
-        print("derivatives will be calculated numerically")
+        print("\nThe VDOS associated with the stretching of two atoms will be obtained\n")
+        print("\nDerivatives will be calculated numerically\n")
         distances = np.linalg.norm((coordinates[:,bond_indices[0],:] - coordinates[:,bond_indices[1],:]), axis=1)
 else: # NETCDF file case
-    print("Coordinates/velocities from the netcdf file will be read using the scipy library")
-    print("Reading file...")
+    print("\nCoordinates/velocities from the netcdf file will be read using the scipy library\n")
+    print("\nReading file...\n")
     trajectory = netcdf_file(input_name, 'r')
     if(mode=="full"):
-        print("The VDOS will be obtained considering all atoms")
+        print("\nThe VDOS will be obtained considering all atoms\n")
         contains_velocities="velocities" in trajectory.variables
         if(contains_velocities and not force_numerical):
-            print("Velocities will be read from the trajectory file.")
+            print("\nVelocities will be read from the trajectory file.\n")
             velocities = np.array(trajectory.variables['velocities'].data)
             nsteps = len(velocities)
             natoms = len(velocities[0])
             normal_vectors = np.linalg.norm(velocities, axis=-1)
         else:
             if(contains_velocities and force_numerical):
-                print("Found velocities but numerical calculation is forced")
-            print("Velocities will be calculated numerically")
+                print("\nFound velocities but numerical calculation is forced\n")
+            print("\nVelocities will be calculated numerically\n")
             coordinates = np.array(trajectory.variables['coordinates'].data)
             nsteps = len(coordinates)
             natoms = len(coordinates[0])
             normal_vectors = np.linalg.norm(coordinates, axis=-1)
-        print("The program will deal with all atoms one by one.")
+        print("\nThe program will deal with all atoms one by one.\n")
     else:
-        print("The VDOS associated with the stretching of two atoms will be obtained")
-        print("derivatives will be calculated numerically")
+        print("\nThe VDOS associated with the stretching of two atoms will be obtained\n")
+        print("\nDerivatives will be calculated numerically\n")
         coordinates = np.array(trajectory.variables['coordinates'].data)
         nsteps = len(coordinates)
         distances = np.linalg.norm((coordinates[:,bond_indices[0],:] - coordinates[:,bond_indices[1],:]), axis=1)
@@ -297,7 +298,7 @@ wavenumber = np.fft.fftfreq(len(yfft), delta_t * c)[0:int(len(yfft) / 2)]
 intensity = yfft[0:int(len(yfft)/2)]
 
 
-print("VDOS saved to " + output_name + " file")
-print("Units are cm-1 for wavenumber and arbitrary units for intensity")
+print("\nVDOS saved to " + output_name + " file\n")
+print("\nUnits are cm-1 for wavenumber and arbitrary units for intensity\n")
 header = "# Wavenumber(cm-1)   # Intensity (a. u.)"
 np.savetxt(output_name, np.column_stack((wavenumber, intensity)), header=header, comments='')
