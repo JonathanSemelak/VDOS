@@ -5,7 +5,11 @@
 </div>
 
 ## Overview
-This Python script, `get_VDOS.py`, is designed to calculate the Vibrational Density of States (VDOS) from molecular dynamics trajectory files. It supports different file formats and offers flexibility in terms of data processing and analysis.
+This Python script, `get_VDOS.py`, is designed to calculate the Vibrational Density of States (VDOS)
+from molecular dynamics trajectory files by computing the Fourier transform of the velocity
+autocorrelation function. It supports different file formats and offers flexibility in terms of
+data processing and analysis.
+
 
 ## Features
 - Supports XYZ and NETCDF file formats.
