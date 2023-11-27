@@ -235,6 +235,7 @@ else: # NETCDF file case
     else:
         print("The VDOS associated with the stretching of two atoms will be obtained")
         print("derivatives will be calculated numerically")
+        coordinates = np.array(trajectory.variables['coordinates'].data)
         distances = np.linalg.norm((coordinates[:,bond_indices[0],:] - coordinates[:,bond_indices[1],:]), axis=1)
 
 window=choose_window(nsteps,window_kind)
