@@ -26,7 +26,9 @@ in terms of data processing and analysis.
 ## Usage
 Run the script from the command line with the required arguments.
 python get_VDOS.py -i [input file] -o [output file] -dt [delta time] [other optional arguments]
-The input format is determined from the extension ('.xyz' for xyz files, and '')
+
+Note: The input format is determined from the extension (assumes netcdf unless the file ends with '.xyz' or '.XYZ')
+
 ## Acknowledgments
 This project incorporates modified functions from [Velocity-ACF](https://github.com/LePingKYXK/Velocity-ACF)
 by [LePingKYXK](https://github.com/LePingKYXK). We thank the author for their valuable work which formed a
@@ -71,18 +73,17 @@ def check_libraries_and_file(input_name):
         sys.exit("Error: NUMPY library is required but is not installed.")
 
     # Check file extension and import specific libraries if necessary
-    if input_name.endswith('.xyz'):
+    if (input_name.endswith('.xyz') or input_name.endswith('.XYZ')):
         try:
             from ase.io import read
         except ImportError:
             sys.exit("Error: ASE library is required for XYZ files but is not installed.")
-    elif input_name.endswith(('.nc', '.netcdf', '.crd')):
+    else:
         try:
-            from scipy import signal
+            from scipy.io import netcdf_file
         except ImportError:
             sys.exit("Error: NETCDF_FILE from SCIPY.IO library is required but is not installed.")
-    else:
-        sys.exit(f"Error: Unsupported file format '{input_name}'.")
+
 # ------------------------------------------
 # This functions were copied from https://github.com/LePingKYXK/Velocity-ACF
 
@@ -182,7 +183,7 @@ check_bool(args.use_normalized_vectors,"--use_normalized_vectors ( -n)")
 use_normalized_vectors = args.use_normalized_vectors == "True"
 
 # Conditional import based on file extension
-if input_name.endswith('.xyz'): from ase.io import read
+if (input_name.endswith('.xyz') or input_name.endswith('.XYZ')): from ase.io import read
 from scipy import signal
 from scipy.io import netcdf_file
 import numpy as np
@@ -190,7 +191,7 @@ import numpy as np
 # Set defaults
 contains_velocities=False
 # Reads data
-if input_name.endswith('.xyz'):  # XYZ file case
+if (input_name.endswith('.xyz') or input_name.endswith('.XYZ')):  # XYZ file case
     print("Coordinates from the xyz file will be read using the ASE library")
     print("Reading file...")
     trajectory = read(input_name, index=':')
