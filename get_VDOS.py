@@ -8,8 +8,9 @@ Get VDOS (Vibrational Density of States) from Molecular Dynamics Trajectories
 
 ## Overview
 This Python script, `get_VDOS.py`, is designed to calculate the Vibrational Density of States (VDOS)
-from molecular dynamics trajectory files. It supports different file formats and offers flexibility
-in terms of data processing and analysis.
+from molecular dynamics trajectory files by computing the Fourier transform of the velocity
+autocorrelation function. It supports different file formats and offers flexibility in terms of
+data processing and analysis.
 
 ## Features
 - Supports XYZ and NETCDF file formats.
@@ -40,6 +41,20 @@ foundation for some of the features in this project.
 c = 2.9979245899e10 # speed of light in vacuum in [cm/s], from Wikipedia.
 # ------------------------------------------
 # Functions definition
+
+def print_welcome_message():
+    print("""
+    ************************************************************
+    *                                                          *
+    *          Welcome to the get_VDOS Python Script!          *
+    *                                                          *
+    * This tool calculates the Vibrational Density of States   *
+    * (VDOS) from molecular dynamics trajectory files.         *
+    *                                                          *
+    *                  Let's get started!                      *
+    *                                                          *
+    ************************************************************
+    """)
 
 def check_mode(args):
     if args.mode not in ['full', 'bond']:
@@ -182,11 +197,17 @@ force_numerical = args.force_numerical == "True"
 check_bool(args.use_normalized_vectors,"--use_normalized_vectors ( -n)")
 use_normalized_vectors = args.use_normalized_vectors == "True"
 
+# The main code starts here <------------------------------------------------------------------
 # Conditional import based on file extension
 if (input_name.endswith('.xyz') or input_name.endswith('.XYZ')): from ase.io import read
 from scipy import signal
 from scipy.io import netcdf_file
 import numpy as np
+
+# Call the function at the beginning of your main script execution
+if __name__ == "__main__":
+    print_welcome_message()
+    # Rest of your script follows here...
 
 # Set defaults
 contains_velocities=False
